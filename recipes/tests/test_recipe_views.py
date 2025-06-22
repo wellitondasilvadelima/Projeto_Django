@@ -38,6 +38,15 @@ class RecipeViewsTests(RecipeTesteBase):
         self.assertIn('Recipe title',content)
         self.assertEqual(len(response_content_recipes),1)
 
+    def test_recipe_home_template_load_recipes_not_published(self):
+        self.make_recipe(is_published=False)
+        home = reverse('recipes:home')
+        response = self.client.get(home)
+        self.assertIn(
+            'No recipes found',
+            response.content.decode('utf-8')
+        )
+
     def test_recipe_category_view_function_is_correct(self):
         category = reverse('recipes:category',kwargs={'category_id':1})
         view = resolve(category)
@@ -47,7 +56,22 @@ class RecipeViewsTests(RecipeTesteBase):
         view =  reverse('recipes:category',kwargs={'category_id':1000})
         response = self.client.get(view)
         self.assertEqual(response.status_code,404)
+
+    def test_recipe_category_template_loads_recipes(self):
+        title = 'this is a category test'
+        self.make_recipe(title=title)
+        view = reverse('recipes:category',kwargs={'category_id':1})
+        response = self.client.get(view)
+        content = response.content.decode('utf-8')
+
+        self.assertIn(title,content)
    
+    def test_recipe_category_template_load_recipes_not_published(self):
+        self.make_recipe(is_published=False)
+        view = reverse('recipes:category',kwargs={'category_id':1})
+        response = self.client.get(view)
+        self.assertEqual(response.status_code,404)
+
     def test_recipe_recipedetails_view_function_is_correct(self):
         recipe = reverse('recipes:recipe',kwargs={'id':1})
         view = resolve(recipe)
@@ -57,6 +81,24 @@ class RecipeViewsTests(RecipeTesteBase):
         view =  reverse('recipes:recipe',kwargs={'id':1000})
         response = self.client.get(view)
         self.assertEqual(response.status_code,404)
+    
+    def test_recipe_recipedetails_template_load_the_correct_recipe(self):
+        title = 'this is a details page test - It a load one recipe'
+        # Nedd a recipe for this test
+        self.make_recipe(title=title)
+        view = reverse('recipes:recipe',kwargs={'id':1})
+        response = self.client.get(view)
+        content = response.content.decode('utf-8')
+
+        self.assertIn(title,content)
+    
+    def test_recipe_recipedetails_template_load_recipes_not_published(self):
+        self.make_recipe(is_published=False)
+        view = reverse('recipes:recipe',kwargs={'id':1})
+        response = self.client.get(view)
+        self.assertEqual(response.status_code,404)
+
+   
 
     # def test_recipe_category_views_load_correct_templates(self):
     #     view = reverse('recipes:category',kwargs={'category_id':1})
