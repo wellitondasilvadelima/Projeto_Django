@@ -1,0 +1,6 @@
+[run]
+branch = True
+omit = venv/*, **/test*.py, manage.py, factory.py
+# coverage run -m --omit='*/venv/*' -m pytest 
+# coverage run -m pytest 
+# coverage html
