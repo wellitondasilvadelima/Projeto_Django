@@ -295,9 +295,35 @@ h5 {
     padding: 0 1rem;
 }
 
-.center{
+.pagination-content{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: red;
+    flex-flow: row wrap;
+    gap: 1rem 0.5rem;
 }
+
+.pagination .page-item{
+    background: var(--color-gray-3);
+    padding: 0.5rem 1rem;
+}
+
+.pagination .page-link{
+    text-decoration: none;
+    background: var(--color-primary);
+    color: var(--color-white);
+
+}
+
+.pagination .page_current{
+    background: var(--color-primary-dark);
+}
+
+/*Generic  */
+.center{
+    text-align: center;
+    margin: var(--spacing-gutter-medium) 0;
+}
+
+
+
+
+
