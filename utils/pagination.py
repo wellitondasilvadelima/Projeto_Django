@@ -49,21 +49,3 @@ def make_pagination(request, queryset, per_page, qnt_page=4):
           current_page,
      )
      return page_obj,pagination_range
-    # before = math.floor(qnt_pages/2)
-    # after = math.ceil(qnt_pages/2)
-    # page_index  = page_range.index(current_page)
-    # last_position = len(page_range)
-
-    # if(page_index<=1):
-    #     list_range = page_range[0:4]
-    # else:
-    #     list_range = page_range[page_index-before:page_index+after]
-
-    # if(list_range.index(current_page)==2 and 
-    #    page_index+after <= last_position-1 ):
-        
-    #     list_range = page_range[page_index-(before-1):page_index+(after+1)]
-    # else:
-    #     list_range = page_range[last_position-qnt_pages:last_position]
-
-    # return list_range

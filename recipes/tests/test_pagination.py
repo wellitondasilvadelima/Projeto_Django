@@ -1,5 +1,6 @@
 from unittest import TestCase
 from utils.pagination import make_pagination_range
+from django.urls import reverse, resolve
 
 class PaginationTests(TestCase):
     def test_make_pagination_range_returns_a_pagination_range(self):
@@ -72,7 +73,3 @@ class PaginationTests(TestCase):
             current_page=20,
         )['pagination']
         self.assertEqual([17, 18, 19,20],pagination)
-
-
-
-
