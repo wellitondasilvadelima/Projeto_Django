@@ -74,7 +74,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
     def test_fields_cannot_be_empty(self, field, msg):
         self.form_data[field] = ''
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
         
         self.assertIn(msg,response.content.decode('utf-8'))
@@ -82,7 +82,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
     
     def test_username_field_min_length_should_be_4(self):
         self.form_data['username'] = 'joa'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
         msg = 'Username must have at least 4 characters'
 
@@ -92,7 +92,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
     def test_username_field_max_length_should_be_150(self):
         self.form_data['username'] = 'A' * 151
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
         
         msg = 'Username must have at less than 150 characters'
@@ -102,7 +102,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
     
     def test_password_field_is_valid(self):
         self.form_data['password'] = 'ABC123'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
         
         msg = 'Passoword invalid!'
@@ -111,7 +111,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
         self.assertIn(msg, response.context['form'].errors.get('password'))
 
         self.form_data['password'] = '1Sd#$0zx'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
         
         msg = 'Passoword invalid!'
@@ -122,7 +122,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
     def test_password_end_password_confirmation_are_equal(self):
         self.form_data['password'] = '1Sd#$0zx'
         self.form_data['password2'] = '1Sd#$0zz'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
 
         msg = 'Password and Repeat Password must be equals'
@@ -132,7 +132,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
         self.form_data['password'] = '1Sd#$0zx'
         self.form_data['password2'] = '1Sd#$0zx'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url,data=self.form_data,follow=True)#follow = True para que o caminho sejaseguido pelo redirecionamento.
 
         msg = 'Password and Repeat Password must be equals'
@@ -141,18 +141,24 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
 
  
     def test_send_get_request_to_registration_create_view_returns_404(self):
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.get(url)
         self.assertEqual(response.status_code,404)
     
    
-    def test_email_field_must_be_unique(self):
-        url = reverse('authors:create')
-        # self.form_data['email'] = 'email@email.com'
+    def test_author_created_can_login(self):
+        url = reverse('authors:register_create')
+        self.form_data.update({
+             'username':'testuser',
+            'password':'abc12!@A',
+            'password2':'abc12!@A',
+        })
         self.client.post(url,data=self.form_data,follow=True)
-        response = self.client.post(url,data=self.form_data,follow=True)
 
-        msg = 'User e-mail already in use'
-        #msg = 'Enter a valid email address'
-        self.assertIn(msg, response.content.decode('utf-8'))
-        self.assertIn(msg, response.context['form'].errors.get('email'))
+        is_authenticated = self.client.login(
+            username='testuser',
+            password='abc12!@A'
+        )
+
+        self.assertTrue(is_authenticated)
+       
