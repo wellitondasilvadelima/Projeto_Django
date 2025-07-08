@@ -21,6 +21,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         search_input = self.browser.find_element(By.XPATH,'//input[@placeholder="Search for a recipe"]')
         search_input.send_keys(title_required)
         search_input.send_keys(Keys.ENTER) 
+        time.sleep(6)
         body = self.browser.find_element(By.CLASS_NAME,'main-content-list')
         self.assertIn(title_required,body.text)
 

@@ -1,6 +1,7 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 import os
 
 class AuthorsBaseTests(StaticLiveServerTestCase):
@@ -21,4 +22,9 @@ class AuthorsBaseTests(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
         return super().tearDown()
+    
+    def get_by_placeholder(self, web_element,placeholder):
+        return web_element.find_element(
+            By.XPATH, f'//input[@placeholder="{placeholder}"]'
+        )
     

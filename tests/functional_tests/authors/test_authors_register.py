@@ -2,12 +2,10 @@ from .base import AuthorsBaseTests
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+import pytest
 
+@pytest.mark.functional_test
 class AuthorsRegisterTest(AuthorsBaseTests):
-    def get_by_placeholder(self, web_element,placeholder):
-        return web_element.find_element(
-            By.XPATH, f'//input[@placeholder="{placeholder}"]'
-        )
     
     def get_form(self):
        return self.browser.find_element(By.XPATH,'/html/body/main//div[2]/form')
@@ -90,6 +88,6 @@ class AuthorsRegisterTest(AuthorsBaseTests):
         self.get_by_placeholder(form, 'Repeat your password here').send_keys('P@ssw0rd1')
         
         form.submit()
-
+        time.sleep(6)
         self.assertIn('Your user is created, please log in.',
                        self.browser.find_element(By.TAG_NAME,'body').text)
