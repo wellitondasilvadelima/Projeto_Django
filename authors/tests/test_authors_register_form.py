@@ -161,4 +161,21 @@ class AuthorRegisterFormIntegrationTest(DjangoTesteCase):
         )
 
         self.assertTrue(is_authenticated)
+    
+    def test_fields_cannot_be_empty(self):
+        url = reverse('authors:register_create')
+        self.client.post(url,data=self.form_data,follow=True)
+        
+        self.form_data['username'] = 'my_username'
+        self.form_data['email'] = 'email@email.com'
        
+        response = self.client.post(url,data=self.form_data,follow=True)
+        msg = 'User e-mail already in use'
+        self.assertIn(msg,response.content.decode('utf-8'))
+        self.assertIn(msg,response.context['form'].errors.get('email'))
+    
+
+    def test_login_create_raises_404_if_not_POST_method(self):
+        url = reverse('authors:login_create')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code,404)

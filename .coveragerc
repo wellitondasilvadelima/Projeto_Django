@@ -1,6 +1,6 @@
 [run]
 branch = True
-omit = venv/*, **/test*.py, manage.py, utils/recipes/factory.py, utils/EX-forms.py,/authors/EX-forms.py
+omit = venv/*, **/test*.py, manage.py, utils/recipes/factory.py, utils/*, tests\functional_tests\recipes\base.py, tests\functional_tests\authors\base.py
 # coverage run -m --omit='*/venv/*' -m pytest 
 # coverage run -m pytest 
 # coverage html
