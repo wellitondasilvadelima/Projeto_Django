@@ -372,9 +372,12 @@ h5 {
     color: var(--color-primary);
     font-size: 1.6rem;
 }
+/* Authors message */
+.login-message{
+    margin: 1rem 0;
+}
 
 /* Messages */
-
  .messages-container{
     display: flex;
     flex-flow: column nowrap;
