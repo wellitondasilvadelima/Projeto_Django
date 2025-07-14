@@ -6,6 +6,8 @@ from  django.urls import reverse
 from .forms import RegisterForm,LoginForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from recipes.models import Recipe
+from authors.forms.recipe_form import AuthorRecipeForm
 
 def register_view(request):
     register_form_data = request.session.get('register_form_data', None)
@@ -80,4 +82,53 @@ def logout_view(request):
 
 @login_required(login_url='authors:login',redirect_field_name='next')
 def dashboard_view(request):
-     return render(request, 'authors/pages/dashboard.html')
+     recipes = Recipe.objects.filter(
+         is_published = False,
+         author = request.user,
+     )
+     return render(
+         request, 'authors/pages/dashboard.html',
+         context={
+             'recipes' : recipes,
+        })
+
+@login_required(login_url='authors:login',redirect_field_name='next')
+def dashboard_recipe_edit(request, id):
+     recipe = Recipe.objects.filter(
+                    is_published = False,
+                    author = request.user,
+                    pk = id,
+                ).first()
+
+     if not recipe:
+         raise Http404()
+     
+     form = AuthorRecipeForm(request.POST or None,
+                             files = request.FILES or None,
+                             instance=recipe,
+                             )
+  
+     if form.is_valid():
+         recipe = form.save(commit  = False)
+         recipe.author = request.user
+         recipe.preparation_steps_is_html = False
+         recipe.is_published = False
+         recipe.save()
+         messages.success(request, 'Sua recieta foi salva com sucesso!')
+         return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)))
+
+     return render(
+                request, 'authors/pages/dashboard_recipe.html',
+                context={
+                    'form' : form,
+                }
+            )
+
+@login_required(login_url='authors:login',redirect_field_name='next')
+def recipe_add_view(request):
+    register_form_data = request.session.get('recipe_form_data', None)
+    form =  RegisterForm(register_form_data)
+    return render(request,'authors/pages/recipe_add_view.html',{
+        'form':form,
+        'form_action':reverse('authors:recipe_create'),
+    })
