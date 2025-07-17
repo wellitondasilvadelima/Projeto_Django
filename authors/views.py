@@ -125,10 +125,58 @@ def dashboard_recipe_edit(request, id):
             )
 
 @login_required(login_url='authors:login',redirect_field_name='next')
-def recipe_add_view(request):
-    register_form_data = request.session.get('recipe_form_data', None)
-    form =  RegisterForm(register_form_data)
-    return render(request,'authors/pages/recipe_add_view.html',{
+def recipe_new_view(request):
+    recipe_form_data = request.session.get('recipe_form_data', None)
+    form =  AuthorRecipeForm(recipe_form_data)
+
+    return render(request,'authors/pages/dashboard_recipe_new.html',{
         'form':form,
         'form_action':reverse('authors:recipe_create'),
     })
+
+@login_required(login_url='authors:login',redirect_field_name='next')
+def recipe_create_view(request):
+    if not request.POST:
+        raise Http404()
+    
+    POST = request.POST
+    request.session['recipe_form_data'] = POST
+
+    form =  AuthorRecipeForm(POST or None,
+                         files = request.FILES or None,
+                         )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+        recipe.save()
+
+        messages.success(request,'Your recipe is created!')
+        del(request.session['recipe_form_data'])
+        return redirect(reverse('authors:recipe_new'))
+    
+    return redirect('authors:recipe_new')
+
+
+@login_required(login_url='authors:login',redirect_field_name='next')
+def dashboard_recipe_delete(request):
+    if not request.POST:
+        raise Http404()
+    
+    POST = request.POST
+    id = POST.get('id')
+     
+    recipe = Recipe.objects.filter(
+                    is_published = False,
+                    author = request.user,
+                    pk = id,
+                ).first()
+
+    if not recipe:
+         raise Http404()
+     
+    recipe.delete()
+    messages.success(request, 'Delete Successfuly!')
+    return redirect('authors:dashboard')

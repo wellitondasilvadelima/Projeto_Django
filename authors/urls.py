@@ -9,9 +9,21 @@ urlpatterns = [
     path('login/create/', views.login_create,name='login_create'),
     path('logout/', views.logout_view,name='logout'),
     path('dashboard/', views.dashboard_view,name='dashboard'),
+
+    path('dashboard/recipe/new/', views.recipe_new_view,name='recipe_new'),
+
+    path('dashboard/recipe/delete/', 
+         views.dashboard_recipe_delete,
+         name='dashboard_recipe_delete'),
+
     path('dashboard/recipe/<int:id>/edit/', 
          views.dashboard_recipe_edit,
          name='dashboard_recipe_edit'),
+    
+    
+    path('dashboard/recipe/new/create/', 
+         views.recipe_create_view,name='recipe_create'),
+
 
     
 ]
