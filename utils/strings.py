@@ -6,4 +6,7 @@ def is_positive_number(value):
       return False
    
    return number > 0
-       
+
+# print(is_positive_number('10'))
+# print(is_positive_number('-10'))
+# print(is_positive_number('10a'))

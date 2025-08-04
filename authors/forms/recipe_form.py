@@ -72,7 +72,7 @@ class AuthorRecipeForm(forms.ModelForm):
                     'Must be a positive number'
                  )
              
-        return field_name
+        return value
     
     def clean_servings(self):
         field_name = 'servings'
@@ -83,4 +83,4 @@ class AuthorRecipeForm(forms.ModelForm):
                  'Must be a positive number'
                  )
              
-        return field_name
+        return value
