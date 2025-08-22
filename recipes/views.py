@@ -12,8 +12,9 @@ import os
 PER_PAGE = int(os.environ.get('PER_PAGE',6))
 
 def home(request):
-     recipes = Recipe.objects.filter(is_published=True).order_by('-id')
-    
+     recipes = Recipe.objects.filter(is_published=True).select_related(
+          'author', 'category').order_by('-id')
+
      #messages.success(request,'Olá Mundo!')
 
      page_obj, pagination_range = make_pagination(request,recipes,PER_PAGE)

@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY','INSECURE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get('DEBUG') == '1' else False
 
-ALLOWED_HOSTS = list[str] = ['*']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -126,13 +126,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/' #Configura caminho dos arquivos staticos para o APP
+STATIC_URL = '/static/' #Configura caminho dos arquivos staticos para o APP
 
 STATICFILES_DIRS = [ # configura caminho staticos Globais
     BASE_DIR / "base_static", 
 ]
 
-STATIC_ROOT = BASE_DIR / 'static' # Configura 
+# STATIC_ROOT = BASE_DIR / 'static' # Configura 
 
 MEDIA_URL = '/media/' # Configura caminho URL de midia
 MEDIA_ROOT = BASE_DIR / 'media' # configura caminho da pasta de média
