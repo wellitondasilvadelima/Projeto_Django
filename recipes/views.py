@@ -2,27 +2,73 @@ from django.shortcuts import render,get_list_or_404,get_object_or_404
 from recipes.models import Recipe
 from django.http import Http404 
 from django.db.models import Q
-
+from django.http import JsonResponse
 from utils.pagination import make_pagination
 import os
-#from django.contrib import messages
-#from utils.recipes.factory import make_recipe
-
 
 PER_PAGE = int(os.environ.get('PER_PAGE',6))
 
 def home(request):
      recipes = Recipe.objects.filter(is_published=True).select_related(
           'author', 'category').order_by('-id')
-
-     #messages.success(request,'Olá Mundo!')
-
+     
      page_obj, pagination_range = make_pagination(request,recipes,PER_PAGE)
 
      return render(request, 'recipes/pages/home.html',context={
           'recipes' : page_obj,
           'pagination_range': pagination_range
      })
+
+def homeAPI(request):
+     recipes = Recipe.objects.filter(is_published=True).select_related(
+          'author', 'category').order_by('-id').values(
+                              "id",
+                              "title",
+                              "description",
+                              "slug",
+                              "preparation_time",
+                              "preparation_time_unit",
+                              "servings",
+                              "servings_unit",
+                              "preparation_steps",
+                              "created_at",
+                              "updated_at",
+                              "is_published",
+                              "cover",
+                              "category__name",
+                              "author__username"
+                         )
+
+     return JsonResponse (
+          list(recipes),
+          safe=False
+     )
+
+def recipedetailAPI(request,id):
+     recipe = Recipe.objects.filter(pk=id,is_published=True).select_related(
+     'author', 'category').values(
+                              "title",
+                              "description",
+                              "slug",
+                              "preparation_time",
+                              "preparation_time_unit",
+                              "servings",
+                              "servings_unit",
+                              "preparation_steps",
+                              "created_at",
+                              "updated_at",
+                              "is_published",
+                              "cover",
+                              "category__name",
+                              "author__username"
+                              ).first()
+     if recipe:
+          recipe["cover"] = request.build_absolute_uri(recipe["cover"])
+     return JsonResponse (
+          recipe,
+          safe=False
+     )
+
 
 def category(request,category_id):
      recipes = get_list_or_404(Recipe.objects.filter(
