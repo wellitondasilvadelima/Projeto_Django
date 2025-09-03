@@ -45,7 +45,7 @@ class Recipe(models.Model):
     def clean(self, *args, **kwargs):
         error_messages = defaultdict(list) 
         recipe_from_db = Recipe.objects.filter(
-            title_iexact = self.title
+            title__iexact = self.title
         ).first()
 
         if recipe_from_db:

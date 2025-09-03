@@ -9,6 +9,10 @@ from django.contrib.auth.decorators import login_required
 from recipes.models import Recipe
 from authors.forms.recipe_form import AuthorRecipeForm
 
+from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+from authors.models import Profile
+
 def register_view(request):
     register_form_data = request.session.get('register_form_data', None)
     form =  RegisterForm(register_form_data)
@@ -180,3 +184,20 @@ def dashboard_recipe_delete(request):
     recipe.delete()
     messages.success(request, 'Delete Successfuly!')
     return redirect('authors:dashboard')
+
+from django.views.generic import TemplateView
+
+#Class Baseview
+class ProfileView(TemplateView):
+    template_name = 'authors/pages/profile.html'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        profile_id = context.get('id')
+        profile = get_object_or_404(Profile.objects.filter(
+            pk = profile_id
+        ).select_related('author'), pk=profile_id)
+        return self.render_to_response({
+            **context,
+            'profile':profile,
+        })

@@ -4,11 +4,9 @@
     <a href="{% url 'authors:dashboard' %}">See your recipes</a> 
     or 
     <a href="{% url 'authors:recipe_new' %}">Create your recipes</a>
-    or click here
-      <form class="display-form-inline" action="{% url 'authors:logout' %}" method='POST'>
-          {% csrf_token %}
-          <input type="hidden" name = "username" value="{{request.user.username}}">
-          <button class = "plaintext-button" type = "submit">Click here</button>
-      </form> to logout.
+    or 
+    <a class ="authors-logout-link" href="#">click here</a>
+    to logout.
+    {% include 'authors/partials/form_logout.html' %}
   </div>
 {% endif %}

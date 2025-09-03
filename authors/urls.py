@@ -24,6 +24,9 @@ urlpatterns = [
     path('dashboard/recipe/new/create/', 
          views.recipe_create_view,name='recipe_create'),
 
+    path('profile/<int:id>/', 
+         views.ProfileView.as_view(), name='profile'),
+
 
     
 ]

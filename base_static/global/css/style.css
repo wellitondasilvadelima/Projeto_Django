@@ -429,7 +429,7 @@ a{
 
 .button-show-menu{
     position: fixed;
-    left: 256px;
+    left: 265px;
     top: 2rem;
     color: var(--color-white);
     background-color: var(--color-primary);
@@ -444,7 +444,6 @@ a{
     cursor: pointer;
 
 }
-
 
 .button-show-menu-visible{
     visibility: visible;
