@@ -21,8 +21,9 @@ class RecipeSearchViewsTests(RecipeTesteBase):
     def test_recipe_search_term_is_on_page_title_and_escaped(self):
         url = reverse('recipes:search') + '?q=<Teste>'
         response = self.client.get(url)
+        msg = "Procurar por"
         self.assertIn(
-            'Search for &quot;&lt;Teste&gt;&quot;',
+            msg +' &quot;&lt;Teste&gt;&quot;',
             response.content.decode('utf-8')
         )
 

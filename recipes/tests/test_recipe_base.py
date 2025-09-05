@@ -5,7 +5,8 @@ from recipes.models import Category,Recipe,User
 class RecipeMixin():
       
     def make_category(self,name='Category'):
-        return  Category.objects.create(name=name)
+        category, _ = Category.objects.get_or_create(name=name)
+        return  category
 
     def make_author(
                 self,

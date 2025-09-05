@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 class Category(models.Model):
-    name = models.CharField(max_length=65,unique=True)
+    name = models.CharField(max_length=65,unique=True,verbose_name=_('Category'))
 
     def __str__(self):
         return self.name # Isso faz com que o nome do elemento seja mostrado na aba admin category
@@ -17,7 +17,7 @@ class Category(models.Model):
        verbose_name_plural = _('Categories')
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=65,verbose_name=_('Title'))
+    title = models.CharField(max_length=65,verbose_name=_('title'))
     description = models.CharField(max_length=165,verbose_name=_('description'))
     slug = models.SlugField(unique=True,verbose_name=_('slug'))
     preparation_time = models.IntegerField(verbose_name=_('preparation_time'))

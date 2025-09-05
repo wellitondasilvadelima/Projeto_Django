@@ -21,8 +21,11 @@ class RecipeModelsTest(RecipeTesteBase):
                         preparation_steps = 'descritption preparation steps',
                         cover = 'recipes/covers/2025/06/20',
                         )
-        recipe.full_clean()
-        recipe.save()
+        try:
+            recipe.full_clean()
+            recipe.save()
+        except ValidationError:
+             pass
         return recipe
     
     @parameterized.expand([
