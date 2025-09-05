@@ -62,7 +62,7 @@ python manage.py runserver
 http://127.0.0.1:8000/
 
 Estrutura do Projeto
-
+```
 site-receitas/
 │
 ├── authors/          # App para usuários
@@ -89,7 +89,7 @@ site-receitas/
 │
 ├── manage.py
 └── requirements.txt
-
+```
 
 Licença
 
